@@ -23,14 +23,12 @@
                 android:id="@+id/address"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="DHAKA, BD"
                 android:textSize="24dp" />
 
             <TextView
                 android:id="@+id/updated_at"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="20 April 2012, 20:08 PM"
                 android:textSize="14dp" />
         </LinearLayout>
 
@@ -47,7 +45,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Clear Sky"
                 android:textSize="18dp" />
 
             <TextView
@@ -56,7 +53,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:fontFamily="sans-serif-thin"
-                android:text="29°C"
                 android:textSize="60dp" />
 
             <LinearLayout
@@ -69,7 +65,7 @@
                     android:id="@+id/temp_min"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Min Temp: 05:05 AM" />
+                   />
 
                 <Space
                     android:layout_width="50dp"
@@ -79,7 +75,7 @@
                     android:id="@+id/temp_max"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Max Temp: 05:05 PM" />
+                   />
             </LinearLayout>
 
             <Button
@@ -111,7 +107,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="#3CF1EBF1"
+                    android:background="@drawable/shadow_bg"
                     android:gravity="center"
                     android:orientation="vertical"
                     android:padding="8dp">
@@ -136,7 +132,6 @@
                         android:id="@+id/sunrise"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="06:40 AM"
                         android:textSize="14dp" />
                 </LinearLayout>
 
@@ -148,7 +143,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="#3CF1EBF1"
+                    android:background="@drawable/shadow_bg"
                     android:gravity="center"
                     android:orientation="vertical"
                     android:padding="8dp">
@@ -173,7 +168,6 @@
                         android:id="@+id/sunset"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="06:40 AM"
                         android:textSize="14dp" />
                 </LinearLayout>
 
@@ -185,7 +179,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="#3CF1EBF1"
+                    android:background="@drawable/shadow_bg"
                     android:gravity="center"
                     android:orientation="vertical"
                     android:padding="8dp">
@@ -210,7 +204,6 @@
                         android:id="@+id/wind"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="06:40 AM"
                         android:textSize="14dp" />
                 </LinearLayout>
             </LinearLayout>
@@ -229,7 +222,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="#3CF1EBF1"
+                    android:background="@drawable/shadow_bg"
                     android:gravity="center"
                     android:orientation="vertical"
                     android:padding="8dp">
@@ -254,7 +247,6 @@
                         android:id="@+id/pressure"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="06:40 AM"
                         android:textSize="14dp" />
                 </LinearLayout>
 
@@ -266,7 +258,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="#3CF1EBF1"
+                    android:background="@drawable/shadow_bg"
                     android:gravity="center"
                     android:orientation="vertical"
                     android:padding="8dp">
@@ -291,7 +283,6 @@
                         android:id="@+id/humidity"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="06:40 AM"
                         android:textSize="14dp" />
                 </LinearLayout>
 
