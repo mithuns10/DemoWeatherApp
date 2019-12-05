@@ -172,7 +172,5 @@ public class BackGroundSycAndFetch extends AsyncTask<String, Void, String> {
         if (mProgressSpinner.isShowing()) {
             mProgressSpinner.dismiss();
         }
-        weatherActivity.getWeatherDetails(strResult,isWeatherDetailsSync);
-
     }
 }

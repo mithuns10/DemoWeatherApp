@@ -2,26 +2,26 @@ package com.android.androidweatherapp.Activities;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.PendingIntent;
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.location.LocationManager;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
-import com.android.androidweatherapp.BackGoundSync.BackGroundSycAndFetch;
+import com.android.androidweatherapp.BackGoundSync.WeatherSync;
 import com.android.androidweatherapp.R;
 
 import org.json.JSONObject;
@@ -32,7 +32,6 @@ import java.util.Date;
 import java.util.Locale;
 
 public class WeatherActivity extends AppCompatActivity {
-
 
     TextView addressTxt;
     TextView updated_atTxt;
@@ -45,7 +44,6 @@ public class WeatherActivity extends AppCompatActivity {
     TextView windTxt;
     TextView pressureTxt;
     TextView humidityTxt;
-    private LocationManager locationManager;
     private Button btnWeatherDetails;
     private String strServerResponse;
 
@@ -58,28 +56,29 @@ public class WeatherActivity extends AppCompatActivity {
             btnWeatherDetails.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-                    NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-
-                    if (mWifi.isConnected()) {
-                        new BackGroundSycAndFetch(WeatherActivity.this, locationManager, false).execute();
-                    }else{
-                        Toast.makeText(WeatherActivity.this,"Please connect the device to wi-fi", Toast.LENGTH_LONG).show();
-                    }
-
+                    ComponentName componentName = new ComponentName(WeatherActivity.this, WeatherSync.class);
+                    JobInfo jobInfo = new JobInfo.Builder(123, componentName).setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED).setPersisted(true).setPeriodic(2 * 60 * 60 * 1000).build();
+                    JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
+                    scheduler.schedule(jobInfo);
                 }
             });
-
-            Intent i = new Intent(getApplicationContext(), WeatherActivity.class);
-            PendingIntent pi = PendingIntent.getActivity(getApplicationContext(),3333,i, PendingIntent.FLAG_CANCEL_CURRENT);
-
         } catch (Exception e) {
-
         }
     }
 
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals("JOB_SERVICE_SUCCESS")) {
+                strServerResponse = intent.getExtras().getString("JSON_RESPONSE");
+                UpdateUI(strServerResponse);
+            }
+        }
+    };
+
     private void initialize() {
         try {
+            registerReceiver(receiver, new IntentFilter("JOB_SERVICE_SUCCESS"));
             addressTxt = findViewById(R.id.address);
             updated_atTxt = findViewById(R.id.updated_at);
             statusTxt = findViewById(R.id.status);
@@ -92,22 +91,7 @@ public class WeatherActivity extends AppCompatActivity {
             pressureTxt = findViewById(R.id.pressure);
             humidityTxt = findViewById(R.id.humidity);
             btnWeatherDetails = findViewById(R.id.btnWeatherDetails);
-            isPermissionGranted(WeatherActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_NETWORK_STATE}, 0);
-            locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        } catch (Exception e) {
-
-        }
-
-    }
-
-    public void getWeatherDetails(String strResult, boolean isWeatherDetailsSync) {
-        try {
-            if (isWeatherDetailsSync) {
-                strServerResponse = strResult;
-                UpdateUI(strServerResponse);
-            } else {
-                new BackGroundSycAndFetch(WeatherActivity.this, locationManager, true).execute("http://api.openweathermap.org/data/2.5/weather?q=" + strResult + "&appid=5ad7218f2e11df834b0eaf3a33a39d2a");
-            }
+            isPermissionGranted(WeatherActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_NETWORK_STATE}, 0);
         } catch (Exception e) {
         }
     }
@@ -118,11 +102,9 @@ public class WeatherActivity extends AppCompatActivity {
         outState.putString("THE_RESPONSE", strServerResponse);
     }
 
-
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-
         String strResponse = savedInstanceState.getString("THE_RESPONSE");
         if (!strResponse.isEmpty()) {
             UpdateUI(strResponse);
@@ -191,7 +173,6 @@ public class WeatherActivity extends AppCompatActivity {
         }
         return true;
     }
-
 
     @Override
     protected void onResume() {

@@ -23,7 +23,6 @@ import java.util.Locale;
 
 public class WeatherSync extends JobService {
     private LocationManager locationManager;
-    private static final int FINE_LOCATION_REQUEST_CODE = 10;
     private Location location;
     private String provider;
 
